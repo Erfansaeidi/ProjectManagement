@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Delete Group{% endblock title %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">Delete Group: {{ group.name }}</h5>
+            </div>
+            <div class="card-body">
+                <p>Are you sure you want to delete <strong>{{ group.name }}</strong>? All members will be detached and their roles will reset to <strong>None</strong>.</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                    <a href="{% url 'group_detail' %}" class="btn btn-outline-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

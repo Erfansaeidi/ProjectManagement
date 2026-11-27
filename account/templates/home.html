@@ -1,17 +1,50 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock title %}
-{% block content %}
+{% block title %}Dashboard - Project Management{% endblock title %}
 
-{% if user.is_authenticated %} Hi {{ user.username }}! You are successfully log_in
-<br>
-{% if user.is_staff %} you are admin
-{% endif %}
-<form action="{% url 'logout' %}" method="post"> {% csrf_token %}
-    <button type="submit">Log Out</button>
-</form>
-<br/>
-<p><a class="btn btn-primary" href="{% url 'article_list' %}" role="button"> View all articles</a></p>
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <img src="{{ profile.get_profile_picture_url }}" alt="{{ user.username }}"
+                         class="rounded-circle object-fit-cover border" width="72" height="72">
+                    <div>
+                        <h4 class="card-title mb-1">{{ user.username }}</h4>
+                        <p class="text-muted mb-2">{{ user.email }}</p>
+                        <span class="badge bg-primary">Role: {{ profile.get_role_display }}</span>
+                    </div>
+                </div>
+                <div class="card-footer bg-white d-flex gap-2">
+                    <a href="{% url 'my_profile' %}" class="btn btn-outline-primary btn-sm">View Profile</a>
+                    <a href="{% url 'profile_edit' %}" class="btn btn-outline-secondary btn-sm">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Group Status</h5>
+                    {% if profile.group %}
+                        <p class="mb-2">You belong to <strong>{{ profile.group.name }}</strong>.</p>
+                        <a href="{% url 'group_detail' %}" class="btn btn-primary btn-sm">Open Group Workspace</a>
+                    {% else %}
+                        <p class="text-muted mb-2">You are not assigned to any group yet.</p>
+                        <a href="{% url 'group_create' %}" class="btn btn-success btn-sm">Create a New Group</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% else %}
-<p>You are not logged in</p>
-<a href="{% url 'login' %}">Log In</a> | <a href="{% url 'signup' %}">Sign Up</a> {% endif %}
+    <div class="p-5 bg-white rounded shadow-sm text-center">
+        <h2 class="mb-3">Project Management Platform</h2>
+        <p class="text-muted mb-4">Sign in to manage your profile, role, and team group.</p>
+        <div class="d-flex justify-content-center gap-2">
+            <a href="{% url 'login' %}" class="btn btn-primary">Log In</a>
+            <a href="{% url 'signup' %}" class="btn btn-outline-secondary">Sign Up</a>
+        </div>
+    </div>
+{% endif %}
 {% endblock content %}

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}{{ ticket.subject }}{% endblock title %}
+
+{% block content %}
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="mb-1">{{ ticket.subject }}</h5>
+            <span class="badge bg-light text-dark border me-1">Category: {{ ticket.get_category_display }}</span>
+            <span class="badge {% if ticket.status == 'closed' %}bg-secondary{% elif ticket.status == 'in_progress' %}bg-warning text-dark{% else %}bg-success{% endif %}">
+                Status: {{ ticket.get_status_display }}
+            </span>
+        </div>
+        <div class="d-flex gap-2">
+            {% if is_staff_viewer or ticket.status != 'closed' %}
+                <a href="{% url 'ticket:ticket_update' ticket.pk %}" class="btn btn-outline-secondary btn-sm">Edit</a>
+            {% endif %}
+            {% if is_staff_viewer and ticket.status != 'closed' %}
+                <form method="post" action="{% url 'ticket:ticket_close' ticket.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Close Ticket</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card-body">
+        {% if is_staff_viewer %}
+            <div class="row g-2 small text-muted mb-3">
+                <div class="col-md-3"><strong>Owner:</strong> {{ ticket.user.username }}</div>
+                <div class="col-md-3"><strong>Priority:</strong> {{ ticket.get_priority_display }}</div>
+                <div class="col-md-3"><strong>Assigned To:</strong> {{ ticket.assigned_to.username|default:"Unassigned" }}</div>
+                <div class="col-md-3"><strong>Expires At:</strong> {{ ticket.expire_at|date:"Y-m-d H:i" }}</div>
+            </div>
+        {% endif %}
+
+        {% if ticket.file %}
+            <a href="{% url 'ticket:ticket_attachment' ticket.pk %}" class="btn btn-outline-primary btn-sm">
+                Download Ticket Attachment
+            </a>
+        {% else %}
+            <p class="text-muted small mb-0">No file attached to this ticket.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white">
+        <h6 class="mb-0">Conversation</h6>
+    </div>
+    <div class="card-body">
+        {% for msg in conversation %}
+            <div class="border rounded p-3 mb-3 {% if msg.sender.is_staff %}bg-light border-primary{% endif %}">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="d-flex align-items-center gap-2">
+                        {% if msg.sender.profile %}
+                            <img src="{{ msg.sender.profile.get_profile_picture_url }}" alt="Avatar"
+                                 class="rounded-circle object-fit-cover" width="26" height="26">
+                        {% endif %}
+                        <strong>{{ msg.sender.username }}</strong>
+                        {% if msg.sender.is_staff %}
+                            <span class="badge bg-primary">Support Staff</span>
+                        {% endif %}
+                    </div>
+                    <small class="text-muted">{{ msg.created_at|date:"Y-m-d H:i" }}</small>
+                </div>
+                <p class="mb-2" style="white-space: pre-line;">{{ msg.body }}</p>
+                {% if msg.file %}
+                    <a href="{% url 'ticket:message_attachment' ticket.pk msg.pk %}" class="btn btn-outline-secondary btn-sm">
+                        Download Attachment
+                    </a>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p class="text-muted mb-0">No messages in this ticket yet.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% if ticket.status != 'closed' %}
+    <div class="card shadow-sm">
+        <div class="card-header bg-white">
+            <h6 class="mb-0">Reply</h6>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'ticket:message_create' ticket.pk %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in message_form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">Send Reply</button>
+            </form>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-secondary">This ticket is closed. No further replies can be added.</div>
+{% endif %}
+{% endblock content %}

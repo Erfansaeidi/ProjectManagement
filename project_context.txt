@@ -1,0 +1,1760 @@
+==> docs/GEMINI.md <==
+# GEMINI.md
+
+# Project Development Guidelines
+
+## 1. Project Overview
+
+-- **Project Name:** projectManagement
+-- **Description:** A web-based project management application.
+-- **Main Goal:** Building a production-grade project management platform with powerful features, excellent performance, security, and maintainable architecture.
+-- **Project Status:** Development
+
+--**Project Goal:**
+The project is intended to become a complete Project Management Platform with the following features:
+
+- **Chat:** Real-time messaging using WebSockets.
+- **Project Tasks:** Project and task management.
+- **Ticket System:** Ticket creation and management.
+- **Emails:** Email management and communication.
+- **Simple Notes:** A simple note-taking system.
+- **Customer Documents:** Customer document management.
+- **Monitoring:** System and activity monitoring.
+- **Colleagues:** Team members and colleague management.
+
+The goal is to implement all these features completely and correctly, following production-grade standards. Every feature must be fully functional, reliable, secure, and properly implemented for real-world production use.
+
+### Core Principles
+
+- Prioritize correctness, maintainability, and security.
+- Build features that solve real problems.
+- Avoid unnecessary complexity.
+- Think about scalability when making architectural decisions.
+- Maintain consistency throughout the project.
+
+---
+
+## 2. Technology Stack
+
+The project currently uses the following technologies:
+
+| Component | Technology |
+|---|---|
+| Backend | Django |
+| Inviorment variable | environs[django] |
+| Frontend | HTML, CSS, JavaScript |
+| Database | PostgreSQL |
+| Infrastructure | Docker |
+| Unit & Integration Testing | Pytest / Django Test Framework  |
+| Load Testing | Locust |
+
+### Technology Rules
+
+- Do not introduce new technologies without a clear technical reason.
+- Prefer existing dependencies and built-in Django features.
+- Do not replace existing technologies without explicit approval.
+- Check package compatibility with the current Python and Django versions before installation.
+
+---
+
+## 3. Project Architecture
+
+### General Rules
+
+- Keep each Django application responsible for a specific domain.
+- Follow the existing architectural patterns.
+- Avoid unnecessary coupling between applications.
+- Reuse existing components and services when appropriate.
+- Maintain clear boundaries between application responsibilities.
+- Avoid circular imports.
+- Do not introduce unnecessary architectural patterns.
+
+### Architecture Decisions
+
+- Do not introduce Repository Pattern, Service Layer, or other architectural abstractions without a clear justification.
+- Do not move existing business logic between layers without understanding its dependencies.
+- Prefer Django's built-in capabilities whenever they are sufficient.
+- Before changing the architecture, analyze the impact on existing applications.
+
+---
+
+## 4. Coding Standards
+
+### General
+
+- Write clean, readable, and maintainable code.
+- Follow official Python and Django conventions.
+- Use meaningful variable, function, and class names.
+- Avoid unnecessary abstractions.
+- Avoid code duplication.
+- Keep functions and classes focused on a single responsibility.
+- Add comments only when the logic is not self-explanatory.
+- Prefer simple solutions over unnecessary complexity.
+- Use type hints when they improve readability and maintainability.
+
+### Django Views
+
+- Always use Class-Based Views (CBVs).
+- Never use Function-Based Views (FBVs).
+- Prefer Django Generic Class-Based Views when appropriate.
+- Use Mixins when they provide a clear benefit.
+- Keep views focused on handling HTTP requests and responses.
+- Avoid duplicating business logic across views.
+
+### Django Models
+
+- Use meaningful model and field names.
+- Define explicit relationships and related_name values.
+- Implement meaningful __str__ methods.
+- Use appropriate field types and constraints.
+- Avoid unnecessary model methods and properties.
+- Keep model responsibilities clear.
+
+### Frontend
+
+- Write semantic HTML.
+- Keep CSS organized and reusable.
+- Use JavaScript only where necessary.
+- Avoid unnecessary frontend dependencies.
+- Maintain consistent UI behavior across the application.
+- Consider accessibility and responsive design.
+
+---
+
+## 5. Development Rules
+
+Before implementing any feature:
+
+1. Inspect the existing project structure.
+2. Read relevant models, views, forms, templates, and URLs.
+3. Understand existing business logic.
+4. Identify dependencies and potential side effects.
+5. Determine the simplest maintainable implementation.
+
+During development:
+
+- Avoid modifying unrelated files.
+- Preserve existing functionality unless explicitly requested otherwise.
+- Do not rewrite working code without a valid reason.
+- Do not assume a feature exists without checking the codebase.
+- Make incremental and focused changes.
+- Reuse existing functionality instead of duplicating it.
+- Follow established naming and file organization conventions.
+- Do not create duplicate files, classes, or functions.
+
+After development:
+
+- Review all modified files.
+- Check for possible regressions.
+- Run relevant tests.
+- Report unresolved problems.
+
+---
+
+## 6. Security Rules
+
+- Never hardcode secrets, passwords, or API keys.
+- Use environment variables for sensitive configuration.
+- Use the `environs` package for environment variable management.
+- Follow the existing environment configuration conventions.
+- Never commit `.env` files.
+- Validate all external input.
+- Follow secure authentication and authorization practices.
+- Never expose sensitive information in responses or logs.
+- Apply the principle of least privilege.
+- Protect against CSRF, XSS, SQL Injection, and other common web vulnerabilities.
+- Never trust client-side validation alone.
+- Check object-level permissions before allowing access to sensitive resources.
+
+---
+
+## 7. Database Guidelines
+
+- Use PostgreSQL as the primary database.
+- Use Django ORM unless raw SQL is technically justified.
+- Use appropriate field types and constraints.
+- Define relationships explicitly.
+- Add indexes when justified by query patterns.
+- Avoid unnecessary database queries.
+- Prevent N+1 query problems.
+- Use `select_related()` and `prefetch_related()` when appropriate.
+- Use `transaction.atomic()` for operations requiring database consistency.
+- Preserve existing data when modifying schemas.
+- Use Django migrations for schema changes.
+- Never manually modify production database schemas.
+
+### Data Integrity
+
+- Consider database-level constraints for important business rules.
+- Prevent inconsistent or invalid relationships.
+- Handle concurrent database operations when necessary.
+- Never perform destructive database operations without explicit approval.
+
+---
+
+## 8. API Guidelines
+
+When developing or modifying APIs:
+
+- Follow consistent naming conventions.
+- Follow REST principles when applicable.
+- Use appropriate HTTP methods and status codes.
+- Validate request data.
+- Return predictable response structures.
+- Handle errors consistently.
+- Apply appropriate authentication and authorization.
+- Avoid exposing internal implementation details.
+
+### API Documentation
+
+- Maintain API documentation in `API.md`.
+- Document new endpoints.
+- Update documentation when existing endpoints change.
+- Document request parameters, response structures, status codes, and authentication requirements.
+- Do not document endpoints that do not actually exist.
+
+---
+
+## 9. Testing Guidelines
+
+- Write tests for every new feature.
+- Test important edge cases.
+- Test successful and unsuccessful scenarios.
+- Test authentication and authorization where applicable.
+- Test database relationships and constraints.
+- Verify existing functionality after modifications.
+- Do not remove or weaken existing tests just to make them pass.
+- Never claim tests passed without actually running them.
+
+### Testing Strategy
+
+- Use Pytest or Django's testing framework according to existing project conventions.
+- Use Locust for load testing when performance or concurrency needs to be evaluated.
+- Do not run unnecessary load tests for every minor change.
+
+---
+
+## 10. Performance Guidelines
+
+- Avoid unnecessary database queries.
+- Optimize ORM operations.
+- Use pagination for large datasets.
+- Avoid loading unnecessary database fields.
+- Use caching when there is a measurable benefit.
+- Consider database indexing for frequently queried fields.
+- Avoid premature optimization.
+- Consider performance implications when implementing large-scale features.
+
+---
+
+## 11. Dependency Management
+
+- Check existing dependencies before installing new packages.
+- Avoid unnecessary dependencies.
+- Prefer established and maintained libraries.
+- Do not upgrade packages without a clear reason.
+- Check compatibility before installing packages.
+- Keep dependency files synchronized.
+- Never remove an existing dependency without checking its usage.
+
+---
+
+## 12. Docker & Deployment
+
+- Follow existing Docker configurations.
+- Keep Dockerfiles simple and maintainable.
+- Use environment variables for configuration.
+- Never store credentials inside Docker images.
+- Keep development and production configurations separate.
+- Avoid unnecessary changes to existing Docker services.
+- Consider security and resource efficiency in production configurations.
+
+---
+
+## 13. AI Instructions
+
+When working on this project, follow these instructions:
+
+### Understanding
+
+1. Read and understand relevant files before editing.
+2. Follow the existing project architecture.
+3. Do not invent requirements or undocumented behavior.
+4. Ask questions when critical requirements are ambiguous.
+5. If something is unknown, do not guess. Investigate the codebase or ask for clarification.
+
+### Implementation
+
+6. Prefer minimal and maintainable changes.
+7. Explain important architectural decisions.
+8. Avoid unnecessary modifications.
+9. Preserve existing behavior.
+10. Do not introduce new dependencies or technologies without justification.
+
+### Verification
+
+11. Review all modified files.
+12. Report all modified and created files.
+13. Report commands and tests actually executed.
+14. Clearly mention unresolved issues.
+15. Never claim something works without verification.
+
+### Communication
+
+16. Be direct, precise, and technically accurate.
+17. Explain important trade-offs when multiple solutions exist.
+18. Do not hide potential problems or limitations.
+19. Ask questions instead of making assumptions when important information is missing.
+
+---
+
+## 14. Documentation Guidelines
+
+- Keep documentation accurate and up to date.
+- Update relevant documentation when changing application behavior.
+- Use `API.md` for API documentation.
+- Avoid duplicating documentation unnecessarily.
+- Document important architectural decisions.
+- Do not create documentation files without a clear purpose.
+
+---
+
+## 15. Critical Rules
+
+These rules must never be violated without explicit user approval:
+
+- Never delete existing models.
+- Never delete existing database data.
+- Never perform destructive database migrations.
+- Never modify production database settings.
+- Never overwrite or delete existing user changes.
+- Never force-push to Git repositories.
+- Never install dependencies without checking existing alternatives.
+- Never introduce a new architectural pattern without justification.
+- Never modify unrelated application functionality.
+- Never expose secrets or credentials.
+
+## Documentation Organization
+
+- Keep global project documentation inside the `docs/` directory.
+- Do not create separate documentation files for every Django application by default.
+- Create app-specific documentation only when an application has complex business logic or independent architectural responsibilities.
+- Keep documentation synchronized with code changes.
+- Avoid duplicating information across documentation files.
+- Before creating documentation, check whether the information already exists.
+- Use clear references between related documentation files.
+
+# Final Principle
+
+Understand first. Analyze carefully. Implement minimally. Test thoroughly.
+
+The primary objective is not simply to write code, but to build a reliable, secure, maintainable, and production-grade project management application.
+
+evey app have readme (document of app , model structure ,  logic , api  )
+
+
+==> docs/api.md <==
+ticket apis
+
+    for user
+
+    POST       /api/support/tickets/                          new ticket
+    GET        /api/support/tickets/                           see tickets
+    GET        /api/support/tickets/{id}/                     ticket detail
+    POST       /api/support/tickets/{id}/messages/        massage in ticket
+    GET        /api/support/tickets/{id}/messages/        conversation in ticket
+
+
+    for support
+
+    PATCH      /api/support/tickets/{id}/close/              close ticket  
+    GET        /api/support/staff/tickets/                       see ticket
+    PATCH      /api/support/staff/tickets/{id}/                 change ticket priority
+    POST       /api/support/staff/tickets/{id}/assign/        ticket for especial support
+
+==> account/README.md <==
+# Account Management System
+
+## 1. Overview
+
+The purpose of this application is to manage user accounts, roles, and group-related access control within the project management platform.
+
+The application is responsible for:
+
+- Managing user roles.
+- Managing user relationships with groups.
+- Controlling access to group-related information.
+- Enforcing role-based permissions.
+- Ensuring data isolation between different groups.
+
+The implementation must follow the existing application architecture and directory structure.
+
+Do not redesign or restructure the application unnecessarily.
+
+---
+
+## 2. User Roles
+
+The application uses a `role` field to determine each user's role and access level.
+
+There are exactly four available roles:
+
+| Role | Description |
+|---|---|
+| `none` | A regular user who does not belong to any group. |
+| `admin` | A specially authorized platform-level user, such as the application developer or company CEO. |
+| `member` | A user who belongs to a group. |
+| `manager` | A user who owns or manages a group. |
+
+Each user can have exactly one role at a time.
+
+### 2.1. None
+
+The `none` role is assigned to newly registered users by default.
+
+A user with this role:
+
+- Has an account in the application.
+- Does not belong to any group.
+- Does not have access to group-specific information.
+- Can access their own account information.
+- Can become a member or manager after joining or creating a group, according to the application's existing group management logic.
+
+### 2.2. Member
+
+The `member` role is assigned to users who belong to a group.
+
+A member can:
+
+- Access their own group's information according to the existing permissions.
+- View members belonging to their own group.
+- Participate in group-related activities according to their permissions.
+- Access resources belonging to their own group when authorized.
+
+A member must NOT be able to:
+
+- View information belonging to other groups.
+- View members of other groups.
+- Access another group's resources.
+- Modify their own role.
+- Assign roles to other users.
+
+### 2.3. Manager
+
+The `manager` role is assigned to users who own or manage a group.
+
+A manager can:
+
+- Manage their own group according to the application's permissions.
+- View members of their own group.
+- Manage group-related operations.
+- Access their group's information and resources.
+- Perform management actions that are explicitly authorized by the application.
+
+A manager must NOT automatically have access to other groups' private information.
+
+A manager cannot assign themselves the `admin` role.
+
+### 2.4. Admin
+
+The `admin` role is reserved for specially authorized individuals, such as:
+
+- The application developer.
+- The company CEO.
+- Other explicitly authorized platform administrators.
+
+Admin privileges must be assigned through a trusted administrative process.
+
+An ordinary user must never be able to assign the `admin` role to themselves or another user.
+
+Admin permissions must be explicitly enforced through backend authorization.
+
+Do not assume that the `admin` role automatically bypasses every group-level security restriction. Follow the project's existing administrative access policy.
+
+---
+
+## 3. Role Assignment & Management
+
+Roles must be managed by the backend.
+
+### Default Role
+
+- Every newly registered user must receive the `none` role.
+- Users must never be able to submit their own role during registration.
+- The default role must be assigned automatically.
+
+### Role Transitions
+
+The expected role transitions are:
+
+| Event | Resulting Role |
+|---|---|
+| User registers | `none` |
+| User joins a group | `member` |
+| User becomes a group's owner | `manager` |
+| User is explicitly authorized as a platform administrator | `admin` |
+
+Additional rules:
+
+- Role changes must be handled by trusted backend logic.
+- Regular users must never be able to modify their own role.
+- Role changes must not be possible through manipulated POST requests.
+- Role assignments must remain consistent with group ownership and membership relationships.
+- When group membership or ownership changes, the corresponding role must be updated according to the application's business rules.
+
+### Important Role Constraint
+
+Each user has exactly one global role.
+
+Before implementing role assignment, inspect the existing group membership and ownership models.
+
+If the existing application allows a user to belong to multiple groups or own one group while belonging to another, a single global role may not fully represent all group-specific relationships.
+
+Do not silently redesign the role system or introduce per-group roles. Preserve the existing architecture and report this conflict before making structural changes.
+
+---
+
+## 4. Group Data Isolation
+
+Data isolation between groups is a fundamental security requirement.
+
+Each group must have access only to its own information.
+
+### Group Privacy Rules
+
+- Groups must not have access to other groups' private information.
+- Group members can only view members belonging to their own group.
+- Members cannot retrieve information about members of other groups.
+- Group resources must be isolated.
+- Group-related queries must always respect group ownership and membership.
+- Access to group data must be validated on the backend.
+
+### Member Visibility
+
+A regular member can:
+
+- View their own profile.
+- View other members belonging to their own group, subject to existing permissions.
+- Access authorized group information.
+
+A regular member cannot:
+
+- View members of other groups.
+- Access another group's member list.
+- Retrieve another group's information by changing URL parameters or object IDs.
+- Access another group's private resources.
+
+### Manager Visibility
+
+A manager can manage and view members of their own group.
+
+A manager must not automatically gain access to another group's members or information.
+
+---
+
+## 5. Database Guidelines
+
+The role functionality must be implemented within the existing account database architecture.
+
+### Role Field
+
+The application must support the following role values:
+
+- `none`
+- `admin`
+- `member`
+- `manager`
+
+Requirements:
+
+- Use Django model choices.
+- Set `none` as the default value for new users.
+- Validate role values.
+- Prevent unauthorized role modifications.
+- Keep role values consistent throughout the application.
+
+### Database Rules
+
+- Inspect existing models before making changes.
+- Reuse existing user and group relationships.
+- Do not introduce duplicate models.
+- Do not create unnecessary database tables.
+- Preserve existing database records.
+- Use appropriate ForeignKey and relationship constraints.
+- Use Django migrations for database schema changes.
+- Never perform destructive database operations without explicit approval.
+
+---
+
+## 6. Authentication & Authorization
+
+Authentication and authorization must be handled using the existing project authentication architecture.
+
+### Authentication
+
+- Use the existing authentication system.
+- Identify the authenticated user through `request.user`.
+- Never trust user IDs submitted by the client.
+- Require authentication for protected account and group operations.
+
+### Authorization
+
+- Check user roles before performing restricted actions.
+- Verify group membership before providing group-related information.
+- Verify group ownership before allowing management operations.
+- Never rely exclusively on frontend restrictions.
+- Apply permission checks to every relevant request.
+- Prevent IDOR (Insecure Direct Object Reference) vulnerabilities.
+- Return appropriate HTTP responses when access is denied.
+
+### Role Security
+
+- Never trust role values received from the client.
+- Never allow ordinary users to modify their own roles.
+- Protect administrative role assignments.
+- Role changes must only happen through authorized backend operations.
+
+---
+
+## 7. Django Development Standards
+
+### Views
+
+- Always use Class-Based Views (CBVs).
+- Never use Function-Based Views (FBVs).
+- Prefer Django Generic Class-Based Views when appropriate.
+- Use Mixins when they provide a clear benefit.
+- Follow existing view organization and naming conventions.
+- Keep views focused on HTTP request and response handling.
+- Avoid duplicating business logic across views.
+
+### Models
+
+- Follow existing model conventions.
+- Keep model responsibilities clear.
+- Use appropriate field types and constraints.
+- Use meaningful relationship names.
+- Avoid unnecessary abstractions.
+
+### Forms
+
+- Use Django Forms or ModelForms where appropriate.
+- Validate all user-submitted data.
+- Never rely exclusively on frontend validation.
+- Do not expose restricted fields through forms.
+
+---
+
+## 8. Security Requirements
+
+Security is a critical requirement of this application.
+
+- Prevent privilege escalation.
+- Prevent unauthorized role modifications.
+- Prevent users from accessing other groups' information.
+- Validate all incoming data.
+- Protect against IDOR vulnerabilities.
+- Enforce permissions on the backend.
+- Use CSRF protection.
+- Prevent SQL injection and XSS vulnerabilities.
+- Never expose sensitive account information.
+- Never trust user-provided group IDs or role values without authorization checks.
+
+All group-related queries must be appropriately scoped to the authenticated user's authorized groups.
+
+---
+
+## 9. Testing Guidelines
+
+Write tests for all important role and permission behaviors.
+
+### Role Tests
+
+- New users receive the `none` role.
+- Users can receive the `member` role when joining a group.
+- Group owners receive the `manager` role.
+- Only authorized operations can assign the `admin` role.
+- Regular users cannot modify their own roles.
+- Invalid role values are rejected.
+
+### Group Isolation Tests
+
+- Members can only view their own group's members.
+- Members cannot access other groups' information.
+- Managers can manage their own groups.
+- Managers cannot access other groups' private information.
+- Changing group IDs in URLs or requests must not bypass permissions.
+
+### Security Tests
+
+- Test unauthorized role modifications.
+- Test privilege escalation attempts.
+- Test IDOR vulnerabilities.
+- Test unauthenticated access.
+- Test unauthorized group operations.
+- Test access through manipulated HTTP requests.
+
+### General Testing Rules
+
+- Use Pytest or Django's testing framework according to existing project conventions.
+- Test successful and unsuccessful scenarios.
+- Include important edge cases.
+- Never remove or weaken existing tests just to make them pass.
+- Never claim tests passed without actually executing them.
+
+---
+
+## 10. Documentation Guidelines
+
+- Follow the existing project documentation structure.
+- Update relevant documentation when role behavior changes.
+- Document important permission rules.
+- Avoid duplicating information unnecessarily.
+- Document important architectural decisions.
+- Do not create unnecessary documentation files.
+
+---
+
+## 11. AI Instructions
+
+When working on this application, follow these instructions strictly.
+
+### Before Coding
+
+1. Read this README carefully.
+2. Inspect the complete existing account application structure.
+3. Read all relevant models, views, forms, URLs, and templates.
+4. Inspect the existing group application and its relationships with the account application.
+5. Understand the current authentication and authorization mechanisms.
+6. Identify existing business logic before modifying anything.
+7. Determine where the role field belongs according to the existing architecture.
+
+### During Implementation
+
+1. Follow the exact existing application structure.
+2. Do not unnecessarily create, move, rename, or delete files.
+3. Do not introduce new architectural patterns without justification.
+4. Use Class-Based Views exclusively.
+5. Preserve existing functionality.
+6. Reuse existing models and relationships whenever possible.
+7. Implement permissions on the backend.
+8. Avoid modifying unrelated applications.
+9. Do not assume relationships or behaviors that have not been verified.
+
+### After Implementation
+
+1. Review all modified files.
+2. Verify role assignment and role transitions.
+3. Verify group data isolation.
+4. Test all important permissions.
+5. Run relevant tests.
+6. Report all modified and created files.
+7. Report commands and tests actually executed.
+8. Clearly mention unresolved issues.
+
+### Uncertainty Handling
+
+- Never guess about existing business logic.
+- If the existing architecture conflicts with these requirements, explain the conflict before making structural changes.
+- Ask for clarification when a critical requirement cannot be determined from the codebase.
+- Never silently change existing architectural decisions.
+
+---
+
+## 12. Critical Rules
+
+The following rules must never be violated without explicit user approval:
+
+- Never delete existing models.
+- Never delete existing database data.
+- Never introduce a custom User model without explicit approval.
+- Never change the existing application architecture unnecessarily.
+- Never use Function-Based Views.
+- Never allow ordinary users to assign roles.
+- Never allow ordinary users to become admins.
+- Never expose one group's private information to another group.
+- Never allow members to view other groups' member lists.
+- Never bypass backend authorization checks.
+- Never overwrite or delete existing user changes.
+- Never introduce unnecessary dependencies.
+
+---
+
+# Final Principle
+
+Understand the existing architecture before making changes.
+
+Preserve the existing structure. Enforce role-based permissions. Maintain strict group data isolation.
+
+The objective is to build a secure, consistent, and maintainable account management system without unnecessarily changing the existing project architecture.
+
+## Profile Management
+
+The application must provide a Profile feature that allows users to manage their profile information and upload a personal profile picture.
+
+### 1. Django Built-in User Model
+
+- Use Django's built-in User model.
+- Reference the user model through `settings.AUTH_USER_MODEL`.
+- Do not create a custom User model.
+- Do not modify Django's built-in User model.
+- Use Django's built-in authentication and account management functionality.
+
+### 2. Profile Model
+
+Create a `Profile` model associated with the built-in User model using a `OneToOneField`.
+
+The Profile model must contain:
+
+| Field | Type | Description |
+|---|---|---|
+| id | PrimaryKey | Unique profile identifier |
+| user | OneToOneField(AUTH_USER_MODEL) | Associated user |
+| role | CharField | User's role |
+| profile_picture | ImageField | User's profile picture |
+
+### 3. Profile Picture Management
+
+Users must be able to:
+
+- Upload a profile picture.
+- Change their existing profile picture.
+- Remove their profile picture.
+- View their current profile picture.
+
+Requirements:
+
+- Profile pictures must be optional.
+- Use Django's built-in `ImageField`.
+- Use Django's file storage mechanisms.
+- Store uploaded images in a dedicated directory, such as `media/profile_pictures/`.
+- Validate uploaded image files.
+- Enforce an appropriate maximum file size.
+- Do not trust user-provided filenames.
+- Replace or remove old profile images safely.
+- Provide a default profile image when no picture has been uploaded.
+
+### 4. Profile Permissions
+
+- Every authenticated user can view their own profile.
+- Users can edit their own profile information.
+- Users can upload, change, or remove only their own profile picture.
+- Users must never be able to modify their own role through profile forms.
+- Regular users must not be able to modify another user's profile.
+- Profile visibility must respect the existing group data isolation rules.
+
+### 5. Role Management
+
+The `role` field must be managed separately from ordinary profile information.
+
+Available roles:
+
+- `none`
+- `admin`
+- `member`
+- `manager`
+
+Rules:
+
+- New users must receive the default `none` role.
+- Role changes must follow the existing role assignment rules.
+- Never include the role field in user-editable profile forms.
+- Only authorized backend operations can modify user roles.
+
+### 6. Django Implementation Requirements
+
+- Use Django's built-in `ImageField`.
+- Use Django ModelForms where appropriate.
+- Handle file uploads through `request.FILES`.
+- Use `multipart/form-data` for upload forms.
+- Use Django's existing file storage system.
+- Use Class-Based Views (CBVs) exclusively.
+- Do not use Function-Based Views (FBVs).
+- Ensure profile creation follows the existing account creation architecture.
+- Prevent duplicate Profile instances.
+- Do not introduce unnecessary dependencies.
+
+**Dependency Note:** Django's `ImageField` requires Pillow. Check existing dependencies before installing it.
+
+### 7. Testing Requirements
+
+Test the following scenarios:
+
+- Profile creation for new users.
+- Profile retrieval.
+- Profile picture upload.
+- Profile picture replacement.
+- Profile picture removal.
+- Invalid file uploads.
+- Maximum file size validation.
+- Unauthorized profile modifications.
+- Attempts to modify the role through profile forms.
+- Access to other users' profiles.
+==> account/admin.py <==
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+
+from .models import CustomUser
+from .forms import CustomUserChangeForm , CustomUserCreationForm
+
+class CustomUserAdmin (UserAdmin):
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
+    list_display = [
+        "username",
+        "email",
+        "is_staff",
+        "id",
+    ]
+    fieldsets = UserAdmin.fieldsets + ((None,{"fields":("age",)}),)
+    add_fieldsets = UserAdmin.add_fieldsets + ((None,{"fields":("age",)}),)
+
+admin.site.register(CustomUser , CustomUserAdmin)
+
+# Register your models here.
+
+==> account/apps.py <==
+from django.apps import AppConfig
+
+
+class AccountConfig(AppConfig):
+    name = 'account'
+
+==> account/forms.py <==
+from django.contrib.auth.forms import UserCreationForm,UserChangeForm
+from .models import CustomUser
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model =CustomUser
+        fields =  (
+            'username',
+            'email',
+        )
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = CustomUser
+        fields = (
+            'username',
+            'email',
+        )
+==> account/__init__.py <==
+
+==> account/models.py <==
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class CustomUser(AbstractUser):
+    pass
+==> account/tests.py <==
+from django.test import TestCase
+
+# Create your tests here.
+
+==> account/urls.py <==
+# account/urls.py
+from django.urls import path
+from .views import *
+
+urlpatterns = [
+
+    path("signup/", SignUpView.as_view(), name="signup"),
+    path("home/", HomeView.as_view(), name="home"),
+
+]
+==> account/views.py <==
+from django.urls import reverse_lazy
+from django.views.generic   import CreateView,TemplateView
+from .models import CustomUser
+from .forms import CustomUserCreationForm
+
+class SignUpView(CreateView):
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy("home")
+    template_name = "registration/signup.html"
+
+class HomeView(TemplateView):
+    model = CustomUser
+    template_name = "home.html"
+
+
+==> account/migrations/0001_initial.py <==
+# Generated by Django 6.1.1 on 2026-10-04 14:59
+
+import django.contrib.auth.models
+import django.contrib.auth.validators
+import django.utils.timezone
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [
+        ('auth', '0012_alter_user_first_name_max_length'),
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name='CustomUser',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('password', models.CharField(max_length=128, verbose_name='password')),
+                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
+                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
+                ('username', models.CharField(error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.', max_length=150, unique=True, validators=[django.contrib.auth.validators.UnicodeUsernameValidator()], verbose_name='username')),
+                ('first_name', models.CharField(blank=True, max_length=150, verbose_name='first name')),
+                ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),
+                ('email', models.EmailField(blank=True, max_length=254, verbose_name='email address')),
+                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
+                ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
+                ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
+                ('age', models.PositiveIntegerField(blank=True, null=True)),
+                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
+                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
+            ],
+            options={
+                'verbose_name': 'user',
+                'verbose_name_plural': 'users',
+                'abstract': False,
+            },
+            managers=[
+                ('objects', django.contrib.auth.models.UserManager()),
+            ],
+        ),
+    ]
+
+==> account/templates/base.html <==
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet"
+          href="https://bootswatch.com/5/sketchy/bootstrap.min.css">
+
+    <title>{% block title %}Newspaper App{% endblock title %}</title>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+
+        <a class="navbar-brand" href="{% url 'home' %}">
+            Newspaper
+        </a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse"
+             id="navbarSupportedContent">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li class="nav-item">
+                    <a class="nav-link active"
+                       aria-current="page"
+                       href="{% url 'home' %}">
+                        Home
+                    </a>
+                </li>
+
+                {% if user.is_authenticated %}
+                    {% if user.is_staff %}
+                        <li class="nav-item">
+                            <a href="{% url 'article_new' %}"
+                               class="nav-link">
+                                + New
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+            </ul>
+
+            {% if user.is_authenticated %}
+
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link dropdown-toggle"
+                           href="#"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            {{ user.username }}
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+
+                            <li>
+                                <a class="dropdown-item"
+                                   href="{% url 'password_change' %}">
+                                    Change password
+                                </a>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <form method="post"
+                                      action="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                            class="dropdown-item">
+                                        Logout
+                                    </button>
+                                </form>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+
+            {% else %}
+
+                <div class="d-flex gap-2">
+                    <a href="{% url 'login' %}"
+                       class="btn btn-outline-secondary">
+                        Log in
+                    </a>
+
+                    <a href="{% url 'signup' %}"
+                       class="btn btn-primary">
+                        Sign up
+                    </a>
+                </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+</nav>
+
+<main>
+    <div class="container">
+        {% block content %}
+        {% endblock content %}
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
+
+==> account/templates/home.html <==
+{% extends "base.html" %}
+{% block title %}Home{% endblock title %}
+{% block content %}
+
+{% if user.is_authenticated %} Hi {{ user.username }}! You are successfully log_in
+<br>
+{% if user.is_staff %} you are admin
+{% endif %}
+<form action="{% url 'logout' %}" method="post"> {% csrf_token %}
+    <button type="submit">Log Out</button>
+</form>
+<br/>
+<p><a class="btn btn-primary" href="{% url 'article_list' %}" role="button"> View all articles</a></p>
+{% else %}
+<p>You are not logged in</p>
+<a href="{% url 'login' %}">Log In</a> | <a href="{% url 'signup' %}">Sign Up</a> {% endif %}
+{% endblock content %}
+==> account/templates/registration/login.html <==
+<!-- templates/registration/login.html -->
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Log In{% endblock title %}
+{% block content %}
+<h2>Log In</h2>
+<form method="post">{% csrf_token %}
+{{ form|crispy }}
+<button class="btn btn-success ms-2" type="submit">Log In</button>
+</form>
+<!-- new code here -->
+<p><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
+<!-- end new code -->
+{% endblock content %}
+==> account/templates/registration/signup.html <==
+<!-- templates/registration/signup.html -->
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Sign Up{% endblock title %}
+{% block content %}
+<br>
+<div class="container" style="width: 50%">
+    <h2>Sign Up</h2>
+    <form method="post">{% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-success ms-2">signup</button>
+    </form>
+    {% endblock content %}
+</div>
+<br>
+
+==> projectManagement/settings.py <==
+"""
+Django settings for projectManagement project.
+
+Generated by 'django-admin startproject' using Django 6.1.3.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/6.1/topics/settings/
+
+For the full list of settings and their values, see
+https://docs.djangoproject.com/en/6.1/ref/settings/
+"""
+
+from pathlib import Path
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-v&c!h0%x$tw-=aptp9_syhf@^33igrw9@ji&7isr=r+n!9blp%'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+ALLOWED_HOSTS = []
+
+
+# Application definition
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+ROOT_URLCONF = 'projectManagement.urls'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = 'projectManagement.wsgi.application'
+
+
+# Database
+# https://docs.djangoproject.com/en/6.1/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+
+# Password validation
+# https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+
+# Internationalization
+# https://docs.djangoproject.com/en/6.1/topics/i18n/
+
+LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'UTC'
+
+USE_I18N = True
+
+USE_TZ = True
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/6.1/howto/static-files/
+
+STATIC_URL = 'static/'
+
+
+# Email
+# https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
+
+MAILERS = {
+    'default': {
+        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+    },
+}
+
+==> projectManagement/urls.py <==
+"""
+URL configuration for projectManagement project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/6.1/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path , include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('support/', include("ticket.urls"),name="support"),
+]
+
+==> ticket/README.md <==
+# Ticket Support System
+
+## 1. Overview
+
+The purpose of this application is to provide a customer support system through a feature called **Ticket**.
+
+Regular users can create support tickets to request assistance. Users with `is_staff=True` are considered support staff and are responsible for handling and responding to tickets.
+
+The system consists of two main models:
+
+- **Ticket:** Stores support request information and ticket-related attachments.
+- **TicketMessage:** Stores messages, replies, and message-related attachments.
+
+---
+
+## 2. User Model Reference
+
+The application uses Django's built-in User model.
+
+### User Model
+
+Use:
+
+`settings.AUTH_USER_MODEL`
+
+All user-related ForeignKey relationships must reference `settings.AUTH_USER_MODEL`.
+
+Do not directly import or reference the User class.
+
+### User Roles
+
+User roles are determined using Django's built-in `is_staff` attribute:
+
+- `is_staff=True`: Support Staff.
+- `is_staff=False`: Regular User.
+
+Do not create a separate support staff model or a custom User model.
+
+---
+
+## 3. Database Models
+
+### 3.1. Ticket Model
+
+The `Ticket` model represents an individual support request.
+
+| Field | Type / Reference | Description |
+|---|---|---|
+| id | PrimaryKey | Unique ticket identifier |
+| user | ForeignKey(AUTH_USER_MODEL) | Ticket owner |
+| subject | CharField | Ticket subject |
+| category | Field | Ticket category |
+| priority | Field | Ticket priority |
+| status | Field | Current ticket status |
+| created_at | DateTimeField | Ticket creation timestamp |
+| updated_at | DateTimeField | Last update timestamp |
+| expire_at | DateTimeField | Ticket expiration timestamp |
+| file | FileField | Optional ticket attachment |
+
+### 3.2. TicketMessage Model
+
+The `TicketMessage` model stores messages and replies exchanged within a ticket.
+
+| Field | Type / Reference | Description |
+|---|---|---|
+| id | PrimaryKey | Unique message identifier |
+| ticket | ForeignKey(Ticket) | Related ticket |
+| sender | ForeignKey(AUTH_USER_MODEL) | Message sender |
+| body | TextField | Message content |
+| created_at | DateTimeField | Message creation timestamp |
+| file | FileField | Optional message attachment |
+
+### Relationships
+
+- Each Ticket belongs to exactly one User.
+- Each Ticket can have multiple TicketMessages.
+- Each TicketMessage belongs to exactly one Ticket.
+- Each TicketMessage has one sender.
+- Both `Ticket.user` and `TicketMessage.sender` reference `settings.AUTH_USER_MODEL`.
+- Both Ticket and TicketMessage can optionally contain an uploaded file.
+
+---
+
+## 4. User Roles & Permissions
+
+### 4.1. Regular Users
+
+Regular users have the following permissions:
+
+- Create new tickets.
+- View only their own tickets.
+- View messages belonging to their own tickets.
+- Reply to support staff messages within their own tickets.
+- Update their own tickets.
+- Upload files to their own tickets.
+- Upload files when sending ticket messages.
+
+Regular users must NOT be able to:
+
+- View tickets created by other users.
+- View messages belonging to other users' tickets.
+- Reply to tickets they do not own.
+- Modify ticket priority or status.
+- Change ticket expiration dates.
+- Close tickets.
+
+Regular users can only view the following Ticket fields:
+
+- `subject`
+- `category`
+- `status`
+
+Other Ticket fields must remain hidden from regular users.
+
+### 4.2. Support Staff
+
+A user with `is_staff=True` is considered a support staff member.
+
+Support staff have the following permissions:
+
+- View and manage all support tickets.
+- Respond to any ticket.
+- Continue existing conversations.
+- Set and modify ticket priority.
+- Set and modify ticket status.
+- Increase or decrease ticket expiration dates.
+- Close tickets.
+- View ticket messages and conversation history.
+- Access ticket attachments and message attachments.
+
+Only support staff can manage ticket priority, status, expiration dates, and ticket closure.
+
+---
+
+## 5. Ticket Lifecycle
+
+- When a ticket is created, its creation timestamp must be stored in `created_at`.
+- The default expiration period is one month after ticket creation.
+- Only support staff can increase or decrease the expiration date.
+- Regular users cannot modify `expire_at`.
+- When a ticket reaches its expiration date, it must be automatically closed.
+- Whenever a ticket is updated, its `updated_at` timestamp must be updated.
+- Only support staff can manually close a ticket.
+
+Ticket expiration must be handled automatically, even when no user visits the ticket.
+
+---
+
+## 6. Ticket Message Rules
+
+- Support staff can send messages to any ticket.
+- Regular users can reply within their own tickets.
+- Regular users cannot send messages to tickets owned by other users.
+- Every message must be associated with a specific ticket.
+- The sender must be recorded for every message.
+- Only the ticket owner and support staff can read ticket messages.
+- Messages must not be modified by unauthorized users.
+
+---
+
+## 7. File Upload Management
+
+The system supports two types of file attachments.
+
+### 7.1. Ticket Attachments
+
+The `Ticket.file` field stores files attached directly to a support ticket.
+
+- Regular users can upload files to their own tickets.
+- Support staff can access ticket attachments.
+- Ticket attachments must follow ticket ownership permissions.
+
+### 7.2. Ticket Message Attachments
+
+The `TicketMessage.file` field stores files attached to individual messages.
+
+- Both regular users and support staff can upload message attachments.
+- Each attachment must be associated with its corresponding message.
+- Attachments must follow the same access permissions as their parent ticket.
+### 7.3. File Upload Security
+
+File uploads are considered private and sensitive resources.
+
+The following security rules are mandatory:
+
+**Storage Security**
+- Never store ticket attachments in publicly accessible directories.
+- Store uploaded files in private storage.
+- Do not expose direct public URLs to uploaded files.
+- Generate unique filenames instead of trusting user-provided filenames.
+- Prevent executable files from being uploaded or executed.
+- Never allow uploaded files to overwrite existing files.
+
+**File Validation**
+- Validate file extensions.
+- Validate MIME types and actual file content.
+- Do not trust the Content-Type header provided by the client.
+- Enforce maximum file size limits.
+- Restrict allowed file types to a predefined whitelist.
+- Reject suspicious or potentially dangerous files.
+- Consider malware scanning for uploaded files.
+
+**Access Control**
+- Every file download must pass through an authenticated backend endpoint.
+- Before serving a file, verify that the requesting user is either:
+  - The owner of the associated ticket.
+  - A support staff member (`is_staff=True`).
+- Regular users must never access attachments belonging to other users' tickets.
+- Apply the same authorization rules to both Ticket and TicketMessage attachments.
+- Never rely on unguessable file URLs as an authorization mechanism.
+
+**Download Security**
+- Do not expose physical storage paths.
+- Prevent directory traversal attacks.
+- Use safe Content-Disposition headers when serving files.
+- Never serve potentially executable uploads as executable content.
+- Use appropriate response headers to reduce browser-based security risks.
+
+**Implementation Requirements**
+- File authorization must be enforced on the server side.
+- File validation must happen before saving uploads.
+- File access must be checked on every download request.
+- Deleting a ticket or attachment must follow the project's file lifecycle and retention rules.
+- Do not bypass Django's authentication and authorization mechanisms.
+
+These security requirements apply to both `Ticket.file` and `TicketMessage.file`.
+
+### Security Requirements
+
+- File uploads must be validated.
+- Restrict allowed file types and file sizes.
+- Do not expose uploaded files through publicly accessible URLs without authorization.
+- Only the ticket owner and support staff can access ticket-related files.
+- Prevent unauthorized file access and downloads.
+
+---
+
+## 8. Access Control Summary
+
+| Action | Regular User | Support Staff |
+|---|---|---|
+| Create Ticket | Yes | Yes |
+| View Own Tickets | Yes | Yes |
+| View Other Users' Tickets | No | Yes |
+| Read Ticket Messages | Own Tickets | All Tickets |
+| Send Ticket Messages | Own Tickets | All Tickets |
+| Update Own Ticket | Yes | Yes |
+| Upload Ticket Files | Own Tickets | Yes |
+| Upload Message Files | Own Tickets | All Tickets |
+| Modify Priority | No | Yes |
+| Modify Status | No | Yes |
+| Modify Expiration Date | No | Yes |
+| Close Ticket | No | Yes |
+
+---
+
+## 9. Important Implementation Rules
+
+- All views must use Class-Based Views (CBVs).
+- Use `settings.AUTH_USER_MODEL` for all user-related model relationships.
+- All permissions must be checked on the backend.
+- Querysets must be filtered according to user roles and ticket ownership.
+- Never rely exclusively on frontend restrictions for access control.
+- Ticket messages must always be validated against their associated ticket.
+- File access must follow ticket ownership and support staff permissions.
+- Expired tickets must be closed automatically.
+- Follow the existing project architecture and coding standards.
+
+
+## 10 api
+
+- you can see all api in the docs/api.md
+==> ticket/admin.py <==
+from django.contrib import admin
+
+# Register your models here.
+
+==> ticket/apps.py <==
+from django.apps import AppConfig
+
+
+class TicketConfig(AppConfig):
+    name = 'ticket'
+
+==> ticket/__init__.py <==
+
+==> ticket/models.py <==
+from django.db import models
+
+# Create your models here.
+
+==> ticket/tests.py <==
+from django.test import TestCase
+
+# Create your tests here.
+
+==> ticket/urls.py <==
+from django.urls import path 
+
+urlpatterns = [
+    
+]
+==> ticket/views.py <==
+
+==> templates/registration/password_change_done.html <==
+{% extends "base.html" %}
+{% block title %}Password Change Successful{% endblock title %}
+{% block content %}
+<h1>Password change successful</h1>
+<p>Your password was changed.</p>
+{% endblock content %}
+==> templates/registration/password_change_form.html <==
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Password Change{% endblock title %}
+{% block content %}
+<h1>Password change</h1>
+<p>Please enter your old password, for security's sake, and then enter
+your new password twice so we can verify you typed it in correctly.</p>
+    <form method="POST">{% csrf_token %}
+        {{ form|crispy }}
+        <input class="btn btn-success" type="submit"
+        value="Change my password">
+    </form>
+{% endblock content %}
+==> templates/registration/password_reset_complete.html <==
+<!-- templates/registration/password_reset_complete.html -->
+{% extends "base.html" %}
+{% block title %}Password reset complete{% endblock title %}
+{% block content %}
+<h1>Password reset complete</h1>
+<p>Your new password has been set.</p>
+<p>You can log in now on the
+<a href="{% url 'login' %}">Log In page</a>.</p>
+{% endblock content %}
+==> templates/registration/password_reset_confirm.html <==
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Enter new password{% endblock title %}
+
+{% block content %}
+
+{% if validlink %}
+    <p>LINK IS VALID</p>
+
+    <h1>Set a new password!</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        <input class="btn btn-success"
+               type="submit"
+               value="Change my password">
+    </form>
+
+    {% if form.errors %}
+        <div>
+            {{ form.errors }}
+        </div>
+    {% endif %}
+
+{% else %}
+    <p>LINK IS INVALID</p>
+{% endif %}
+
+{% endblock content %}
+==> templates/registration/password_reset_done.html <==
+<!-- templates/registration/password_reset_done.html -->
+{% extends "base.html" %}
+{% block title %}Email Sent{% endblock title %}
+{% block content %}
+<h1>Check your inbox.</h1>
+<p>We've emailed you instructions for setting your password.
+You should receive the email shortly!</p>
+{% endblock content %}
+==> templates/registration/password_reset_form.html <==
+
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Forgot Your Password?{% endblock title %}
+{% block content %}
+<h1>Forgot your password?</h1>
+<p>Enter your email address below, and we'll email instructions
+for setting a new one.</p>
+<form method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input class="btn btn-success" type="submit"
+    value="Send me instructions!">
+</form>
+{% endblock content %}
