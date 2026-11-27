@@ -265,3 +265,8 @@ These security requirements apply to both `Ticket.file` and `TicketMessage.file`
 - File access must follow ticket ownership and support staff permissions.
 - Expired tickets must be closed automatically.
 - Follow the existing project architecture and coding standards.
+
+
+## 10 api
+
+- you can see all api in the docs/api.md
